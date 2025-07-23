@@ -1,0 +1,1536 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hoàng Vân Express - Khám Phá Việt Nam</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Swiper.js for Slideshows -->
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+    <!-- Marked.js for rendering Markdown from AI -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <!-- Favicon -->
+    <link rel="icon" href="img/logohoangvan5.jpg" type="image/png">
+
+    <style>
+        /* Custom CSS - Modern Travel Theme */
+        :root {
+            /* Light Mode Defaults */
+            --primary-red: #D92E3A;
+            --primary-red-dark: #b3222d;
+            --dark-blue: #0d1b2a;
+            --gold-accent: #D4AF37;
+
+            --bg-body: #f8f9fa;
+            --text-body: #333;
+            --bg-header: rgba(255, 255, 255, 0.9);
+            --bg-section: #ffffff;
+            --bg-card: #ffffff;
+            --bg-chat-ai: #e9e9eb;
+            --text-chat-ai: #333;
+            --border-color: #e0e0e0;
+            --bg-footer: var(--dark-blue);
+            --text-footer: #ffffff;
+            --text-footer-secondary: #cbd5e1;
+        }
+
+        /* Dark Mode Overrides */
+        html.dark-mode {
+            --bg-body: #1a202c;
+            --text-body: #e2e8f0;
+            --bg-header: rgba(26, 32, 44, 0.9);
+            --bg-section: #2d3748;
+            --bg-card: #4a5568;
+            --bg-chat-ai: #4a5568;
+            --text-chat-ai: #e2e8f0;
+            --border-color: #4a5568;
+            /* Keep dark blue for consistency */
+            --text-footer: #e2e8f0;
+            --text-footer-secondary: #94a3b8;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-body);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            /* Smooth transition for theme change */
+        }
+
+        /* Header background */
+        #header {
+            background-color: var(--bg-header);
+            border-bottom-color: var(--border-color);
+        }
+
+        /* Hero Slideshow Styling */
+        .hero-swiper {
+            width: 100%;
+            height: 100vh;
+        }
+
+        .hero-swiper .swiper-slide {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-size: cover;
+            background-position: center;
+            color: white;
+        }
+
+        .hero-swiper .swiper-slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.3));
+        }
+
+        .hero-swiper .swiper-content {
+            position: relative;
+            z-index: 10;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        /* Text shadow for hero headings for better contrast */
+        .hero-heading-shadow {
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Modal Styling */
+        .modal {
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .modal-content {
+            background-color: var(--bg-card);
+            /* Use card background for modal */
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .modal-content h3 {
+            color: var(--text-body);
+        }
+
+        .modal-content p {
+            color: var(--text-body);
+        }
+
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--border-color);
+            /* Use border color for track */
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-red);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-red-dark);
+        }
+
+        /* Fade-in on scroll animation */
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Marquee Animation */
+        @keyframes marquee {
+            0% {
+                transform: translateX(0%);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        .animate-marquee {
+            display: inline-block;
+            animation: marquee 40s linear infinite;
+        }
+
+        /* General Button Styling */
+        .btn-primary {
+            background-image: linear-gradient(to right, var(--primary-red) 0%, var(--primary-red-dark) 100%);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px 0 rgba(217, 46, 58, 0.35);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px 0 rgba(217, 46, 58, 0.45);
+        }
+
+        /* AI Chat Interface Styling */
+        .chat-bubble {
+            max-width: 80%;
+            padding: 0.75rem 1rem;
+            border-radius: 1.25rem;
+            line-height: 1.6;
+        }
+
+        .user-bubble {
+            background-color: var(--primary-red);
+            color: white;
+            border-bottom-right-radius: 0.25rem;
+        }
+
+        .ai-bubble {
+            background-color: var(--bg-chat-ai);
+            /* Use AI chat background variable */
+            color: var(--text-chat-ai);
+            /* Use AI chat text color variable */
+            border-bottom-left-radius: 0.25rem;
+        }
+
+        .ai-bubble h1,
+        .ai-bubble h2,
+        .ai-bubble h3 {
+            font-weight: 700;
+            margin-top: 0.5rem;
+            margin-bottom: 0.25rem;
+            color: var(--dark-blue);
+            /* Headings in AI bubble keep dark blue for contrast */
+        }
+
+        .ai-bubble ul,
+        .ai-bubble ol {
+            margin-left: 1.25rem;
+            list-style: revert;
+            padding-left: 1rem;
+        }
+
+        .ai-bubble p {
+            margin-bottom: 0.5rem;
+        }
+
+        .ai-bubble strong {
+            /* Ensures strong text in AI bubble uses primary red for emphasis */
+            color: var(--primary-red);
+        }
+
+        .typing-indicator span {
+            height: 8px;
+            width: 8px;
+            margin: 0 2px;
+            background-color: var(--text-footer-secondary);
+            /* Adjust color for visibility */
+            border-radius: 50%;
+            display: inline-block;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+
+        .typing-indicator span:nth-child(1) {
+            animation-delay: -0.32s;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: -0.16s;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            80%,
+            100% {
+                transform: scale(0);
+            }
+
+            40% {
+                transform: scale(1.0);
+            }
+        }
+
+        /* Gradient text effect for main headings */
+        .gradient-text {
+            background: linear-gradient(to right, var(--primary-red), var(--primary-red-dark), var(--gold-accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+            /* Fallback for browsers that don't support text-fill-color */
+        }
+
+        /* Sections with variable backgrounds */
+        section {
+            background-color: var(--bg-section);
+            transition: background-color 0.3s ease;
+        }
+
+        #partners {
+            /* Partners section might share bg with main body or be slightly different */
+            background-color: var(--bg-body);
+        }
+
+
+        /* Card styling using CSS variables */
+        .destination-card,
+        .swiper-slide a.block {
+            background-color: var(--bg-card);
+            transition: background-color 0.3s ease;
+        }
+
+        /* Text colors for different elements */
+        .text-gray-800 {
+            color: var(--text-body);
+        }
+
+        .text-gray-600 {
+            color: var(--text-body);
+            opacity: 0.8;
+        }
+
+        .text-gray-500 {
+            color: var(--text-body);
+            opacity: 0.7;
+        }
+
+        .text-gray-700 {
+            color: var(--text-body);
+            opacity: 0.9;
+        }
+
+        /* Footer styling using variables */
+        footer {
+            background-color: var(--bg-footer);
+            color: var(--text-footer);
+        }
+
+        footer .text-gray-400 {
+            color: var(--text-footer-secondary);
+        }
+
+        footer .bg-gray-700 {
+            background-color: var(--bg-card);
+        }
+
+        footer .border-gray-700 {
+            border-color: var(--border-color);
+        }
+
+        /* Mobile menu text color */
+        #mobile-menu a {
+            color: var(--text-body);
+        }
+
+        #mobile-menu a:hover {
+            background-color: var(--bg-chat-ai);
+        }
+
+        /* Outer wrapper for video with animated border and floating effect */
+        .video-outer-wrapper {
+            position: relative;
+            padding: 5px;
+            /* Thickness of the animated border */
+            border-radius: 0.75rem;
+            /* Matches rounded-xl */
+            overflow: hidden;
+            background: linear-gradient(90deg, var(--primary-red), var(--gold-accent), var(--primary-red-dark), var(--gold-accent), var(--primary-red));
+            background-size: 200% 100%;
+            /* Makes the gradient wider than the element */
+            animation: borderAnimation 3s linear infinite, videoFloat 3s ease-in-out infinite alternate;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            /* Original shadow */
+            transition: background-color 0.3s ease;
+            /* For dark mode transition */
+        }
+
+        /* Responsive video container for 16:9 aspect ratio */
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            /* 16:9 Aspect Ratio */
+            height: 0;
+            overflow: hidden;
+            background-color: var(--bg-card);
+            /* To cover the center of the gradient */
+            border-radius: 0.75rem;
+            /* Matches outer wrapper radius */
+            z-index: 2;
+            /* Ensures it's above the animated background */
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+            object-fit: cover;
+            /* Ensure video covers the container */
+        }
+
+        /* Removed .video-container video and .video-container:hover video styles as they are no longer needed */
+        /* Removed .video-overlay and .play-icon styles as they are no longer needed */
+
+
+        /* Keyframe animation for floating effect */
+        @keyframes videoFloat {
+            0% {
+                transform: translateY(0px) scale(1);
+            }
+
+            50% {
+                transform: translateY(-5px) scale(1.005);
+            }
+
+            100% {
+                transform: translateY(0px) scale(1);
+            }
+        }
+
+        /* Keyframe animation for running border effect */
+        @keyframes borderAnimation {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            100% {
+                background-position: 100% 50%;
+            }
+        }
+
+        /* New Banner Specific Styles */
+        .new-banner-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .new-banner-container {
+            position: relative;
+            overflow: hidden;
+            max-width: 1200px;
+            /* Chiều rộng tối đa của banner */
+            width: 100%;
+            aspect-ratio: 1200 / 250;
+            /* Tỷ lệ khung hình dựa trên hình ảnh bạn cung cấp */
+            border-radius: 0.75rem;
+            /* Bo tròn góc nhẹ nhàng */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            /* Đổ bóng tinh tế */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            /* Hiệu ứng chuyển động */
+            display: flex;
+            /* Ensure flex properties apply to the link container */
+            align-items: center;
+            justify-content: center;
+            /* Center content horizontally */
+            text-decoration: none;
+            /* Remove underline from link */
+            color: inherit;
+            /* Inherit text color */
+        }
+
+        .new-banner-container:hover {
+            transform: translateY(-5px);
+            /* Nâng nhẹ banner khi hover */
+            box-shadow: 0 15px 20px -5px rgba(0, 0, 0, 0.2), 0 6px 10px -3px rgba(0, 0, 0, 0.1);
+            /* Đổ bóng đậm hơn khi hover */
+        }
+
+        .new-banner-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            /* Position the image absolutely within the container */
+            top: 0;
+            left: 0;
+            transform: scale(1.05);
+            /* Initial zoom for the image */
+            transition: transform 5s ease-out;
+            /* Transition for the zoom effect */
+            z-index: 1;
+            /* Ensure image is behind content */
+        }
+
+        .new-banner-container.loaded .new-banner-image {
+            transform: scale(1);
+            /* Zoom out to 100% when loaded */
+        }
+
+        .new-banner-content {
+            position: relative;
+            /* Position relative to the container */
+            z-index: 2;
+            /* Ensure content is above the image */
+            display: flex;
+            flex-direction: column;
+            /* Stack title and subtitle vertically */
+            align-items: center;
+            /* Center items horizontally */
+            justify-content: center;
+            /* Center items vertically */
+            width: 100%;
+            height: 100%;
+            /* Lớp phủ gradient để làm nổi bật chữ, màu sắc và độ trong suốt được tinh chỉnh */
+            background: linear-gradient(to right, rgba(198, 226, 255, 0.95) 0%, rgba(198, 226, 255, 0.7) 50%, rgba(198, 226, 255, 0.0) 100%);
+            padding: 20px 40px;
+            /* Điều chỉnh padding */
+            box-sizing: border-box;
+            opacity: 0;
+            /* Mặc định ẩn để tạo hiệu ứng fade-in */
+            transform: translateY(20px);
+            /* Bắt đầu từ dưới lên */
+            transition: opacity 1s ease-out 0.5s, transform 1s ease-out 0.5s;
+            /* Hiệu ứng fade-in và trượt lên */
+        }
+
+        .new-banner-content.loaded {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Removed .new-banner-emblem-img as the logo is removed */
+        .new-banner-text-content {
+            /* No longer needed flex-grow as it's the only content */
+            text-align: center;
+            /* Center text content */
+        }
+
+        .new-banner-title-main {
+            font-size: 2.2rem;
+            /* Kích thước chữ tinh chỉnh */
+            font-weight: 700;
+            color: #B22222;
+            /* Màu đỏ sẫm hơn, gần với màu trong hình ảnh */
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
+            /* Đổ bóng chữ rõ hơn */
+            line-height: 1.2;
+            margin-bottom: 5px;
+        }
+
+        .new-banner-title-sub {
+            font-size: 3.2rem;
+            /* Kích thước chữ lớn nhất tinh chỉnh */
+            font-weight: 800;
+            /* Đậm hơn */
+            color: #B22222;
+            /* Màu đỏ sẫm hơn */
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
+            /* Đổ bóng chữ rõ hơn */
+            line-height: 1.2;
+        }
+
+        /* Responsive adjustments for new banner */
+        @media (max-width: 768px) {
+            .new-banner-content {
+                padding: 15px;
+            }
+
+            .new-banner-title-main {
+                font-size: 1.6rem;
+            }
+
+            .new-banner-title-sub {
+                font-size: 2.2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .new-banner-title-main {
+                font-size: 1.3rem;
+            }
+
+            .new-banner-title-sub {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+
+<body class="text-gray-800">
+
+    <!-- Header & Navigation -->
+    <header id="header"
+        class="bg-white/90 backdrop-blur-lg shadow-sm fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-gray-200">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#home" class="flex items-center space-x-3">
+                <img src="img/logohoangvan5.jpg" alt="Hoàng Vân Express Logo" class="h-10 w-10 rounded-full"
+                    onerror="this.onerror=null;this.src='https://placehold.co/100x100/CCCCCC/333333?text=Logo'">
+                <span class="text-2xl font-extrabold text-gray-800 tracking-tight">Hoàng Vân <span
+                        class="text-[var(--primary-red)]">Express</span></span>
+            </a>
+            <nav class="hidden lg:flex items-center space-x-8">
+                <a href="#home"
+                    class="text-gray-600 hover:text-[var(--primary-red)] font-semibold transition duration-300">Trang
+                    Chủ</a>
+                <a href="#destinations"
+                    class="text-gray-600 hover:text-[var(--primary-red)] font-semibold transition duration-300">Điểm
+                    Đến</a>
+                <a href="#culture"
+                    class="text-gray-600 hover:text-[var(--primary-red)] font-semibold transition duration-300">Đặc
+                    Sản</a>
+                <a href="#videos"
+                    class="text-gray-600 hover:text-[var(--primary-red)] font-semibold transition duration-300">Video</a>
+                <a href="#ai-assistant"
+                    class="text-gray-600 hover:text-[var(--primary-red)] font-semibold transition duration-300">Trợ Lý
+                    AI</a>
+                <a href="#contact" class="btn-primary text-white font-bold py-2 px-6 rounded-full text-sm">Liên Hệ</a>
+                <!-- Theme Toggle Button -->
+                <button id="theme-toggle" aria-label="Chuyển đổi chế độ sáng/tối"
+                    class="p-2 rounded-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 transition-colors duration-300">
+                    <!-- Sun icon for light mode, Moon icon for dark mode -->
+                    <svg id="sun-icon" class="w-6 h-6 text-yellow-500 hidden" fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                            d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.106a.75.75 0 00-1.06-1.06l-1.591 1.59a.75.75 0 101.06 1.06l1.591-1.59zM21.75 12.75h-2.25a.75.75 0 010-1.5h2.25a.75.75 0 010 1.5zM15.91 18.894a.75.75 0 001.061 1.06l1.591-1.59a.75.75 0 00-1.06-1.06l-1.59 1.591zM12 18.75a.75.75 0 01-.75.75v2.25a.75.75 0 011.5 0v-2.25a.75.75 0 01-.75-.75zM6.106 15.91a.75.75 0 00-1.06-1.06l-1.591 1.59a.75.75 0 001.06 1.06l1.591-1.59zM3 12.75H.75a.75.75 0 010-1.5H3a.75.75 0 010 1.5zM4.515 6.515a.75.75 0 001.06-1.061l-1.59-1.59a.75.75 0 00-1.061 1.06l1.59 1.591z" />
+                    </svg>
+                    <svg id="moon-icon" class="w-6 h-6 text-blue-500" fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                            d="M9.593 3.655A.75.75 0 008.23 6.072l.536.877c1.077 1.766 2.57 3.259 4.336 4.336l.877.537a.75.75 0 002.418-1.363l-.536-.877a11.964 11.964 0 00-4.336-4.336zM12 21a9 9 0 119-9c0-.726-.065-1.44-.195-2.148a.75.75 0 10-1.357.519A10.466 10.466 0 0121 12c0 5.799-4.701 10.5-10.5 10.5S1.5 17.799 1.5 12a10.466 10.466 0 011.97-6.002.75.75 0 101.357-.519A12.001 12.001 0 0012 21z" />
+                    </svg>
+                </button>
+            </nav>
+            <div class="lg:hidden flex items-center space-x-3">
+                <!-- Mobile Theme Toggle Button -->
+                <button id="theme-toggle-mobile" aria-label="Chuyển đổi chế độ sáng/tối"
+                    class="p-2 rounded-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 transition-colors duration-300">
+                    <svg id="sun-icon-mobile" class="w-6 h-6 text-yellow-500 hidden"
+                        viewBox="0 0 24 24">
+                        <path
+                            d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.106a.75.75 0 00-1.06-1.06l-1.591 1.59a.75.75 0 101.06 1.06l1.591-1.59zM21.75 12.75h-2.25a.75.75 0 010-1.5h2.25a.75.75 0 010 1.5zM15.91 18.894a.75.75 0 001.061 1.06l1.591-1.59a.75.75 0 00-1.06-1.06l-1.59 1.591zM12 18.75a.75.75 0 01-.75.75v2.25a.75.75 0 011.5 0v-2.25a.75.75 0 01-.75-.75zM6.106 15.91a.75.75 0 00-1.06-1.06l-1.591 1.59a.75.75 0 001.06 1.06l1.591-1.59zM3 12.75H.75a.75.75 0 010-1.5H3a.75.75 0 010 1.5zM4.515 6.515a.75.75 0 001.06-1.061l-1.59-1.59a.75.75 0 00-1.061 1.06l1.59 1.591z" />
+                    </svg>
+                    <svg id="moon-icon-mobile" class="w-6 h-6 text-blue-500" fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                            d="M9.593 3.655A.75.75 0 008.23 6.072l.536.877c1.077 1.766 2.57 3.259 4.336 4.336l.877.537a.75.75 0 002.418-1.363l-.536-.877a11.964 11.964 0 00-4.336-4.336zM12 21a9 9 0 119-9c0-.726-.065-1.44-.195-2.148a.75.75 0 10-1.357.519A10.466 10.466 0 0121 12c0 5.799-4.701 10.5-10.5 10.5S1.5 17.799 1.5 12a10.466 10.466 0 011.97-6.002.75.75 0 101.357-.519A12.001 12.001 0 0012 21z" />
+                    </svg>
+                </button>
+                <button id="mobile-menu-button" aria-label="Open mobile menu"
+                    class="text-gray-800 focus:outline-none"><svg class="w-7 h-7" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16m-7 6h7"></path>
+                    </svg></button>
+            </div>
+        </div>
+        <div id="mobile-menu" class="lg:hidden hidden bg-white border-t border-gray-200">
+            <a href="#home"
+                class="block py-3 px-6 text-base text-gray-600 hover:bg-gray-50 hover:text-[var(--primary-red)]">Trang
+                Chủ</a>
+            <a href="#destinations"
+                class="block py-3 px-6 text-base text-gray-600 hover:bg-gray-50 hover:text-[var(--primary-red)]">Điểm
+                Đến</a>
+            <a href="#culture"
+                class="block py-3 px-6 text-base text-gray-600 hover:bg-gray-50 hover:text-[var(--primary-red)]">Đặc
+                Sản</a>
+            <a href="#videos"
+                class="block py-3 px-6 text-base text-gray-600 hover:bg-gray-50 hover:text-[var(--primary-red)]">Video</a>
+            <a href="#ai-assistant"
+                class="block py-3 px-6 text-base text-gray-600 hover:bg-gray-50 hover:text-[var(--primary-red)]">Trợ Lý
+                AI</a>
+            <a href="#contact"
+                class="block py-3 px-6 text-base text-gray-600 hover:bg-gray-50 hover:text-[var(--primary-red)]">Liên
+                Hệ</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="home">
+            <div class="swiper hero-swiper">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide" style="background-image:url(img/hoangvan1.jpg)"
+                        onerror="this.style.backgroundImage='url(https://placehold.co/1920x1080/000000/FFFFFF?text=Image+Load+Error)'">
+                        <div class="swiper-content container mx-auto px-6 text-center">
+                            <h1 class="text-4xl md:text-6xl font-extrabold mb-4 leading-tight hero-heading-shadow">Chào
+                                Mừng Đến Với Hoàng
+                                Vân, Bắc Ninh</h1>
+                            <p class="text-lg md:text-xl font-light mb-8 max-w-2xl mx-auto hero-heading-shadow">Về với
+                                miền quê Bắc Ninh
+                                thanh bình, nơi có những cánh đồng lúa trải dài và con người nồng hậu.</p>
+                            <a href="#destinations"
+                                class="btn-primary text-white font-bold py-4 px-10 rounded-full text-lg">Khám Phá
+                                Ngay</a>
+                        </div>
+                    </div>
+                    <div class="swiper-slide" style="background-image:url(img/hoangvan2.jpg)"
+                        onerror="this.style.backgroundImage='url(https://placehold.co/1920x1080/1A1A1A/FFFFFF?text=Image+Load+Error)'">
+                        <div class="swiper-content container mx-auto px-6 text-center">
+                            <h1 class="text-4xl md:text-6xl font-extrabold mb-4 leading-tight hero-heading-shadow">Về
+                                Miền Đất Lịch Sử An
+                                Toàn Khu II</h1>
+                            <p class="text-lg md:text-xl font-light mb-8 max-w-2xl mx-auto hero-heading-shadow">Nơi lưu
+                                giữ những giá trị
+                                lịch sử hào hùng và tinh thần bất khuất của dân tộc.</p>
+                            <a href="#destinations"
+                                class="btn-primary text-white font-bold py-4 px-10 rounded-full text-lg">Tìm Hiểu
+                                Thêm</a>
+                        </div>
+                    </div>
+                    <div class="swiper-slide" style="background-image:url(img/hoangvan3.jpg)"
+                        onerror="this.style.backgroundImage='url(https://placehold.co/1920x1080/333333/FFFFFF?text=Image+Load+Error)'">
+                        <div class="swiper-content container mx-auto px-6 text-center">
+                            <h1 class="text-4xl md:text-6xl font-extrabold mb-4 leading-tight hero-heading-shadow">
+                                Thưởng Thức Đặc Sản Trám
+                                Đen</h1>
+                            <p class="text-lg md:text-xl font-light mb-8 max-w-2xl mx-auto hero-heading-shadow">Hương vị
+                                độc đáo, béo bùi
+                                của thức quà quê hương Hoàng Vân.</p>
+                            <a href="#culture"
+                                class="btn-primary text-white font-bold py-4 px-10 rounded-full text-lg">Nếm Thử Hương
+                                Vị</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="swiper-pagination"></div>
+            </div>
+        </section>
+        <!-- Marquee section -->
+        <div class="bg-[var(--dark-blue)] text-white py-4 overflow-x-hidden shadow-inner">
+            <div class="animate-marquee whitespace-nowrap">
+                <span class="mx-8 text-lg font-semibold tracking-wider text-[var(--gold-accent)]">✨ KHÁM PHÁ HOÀNG
+                    VÂN:</span>
+                <span class="mx-8 text-lg">DI TÍCH AN TOÀN KHU II</span><span
+                    class="text-[var(--gold-accent)] mx-2">*</span>
+                <span class="mx-8 text-lg">ĐÌNH CHỢ VÂN</span><span class="text-[var(--gold-accent)] mx-2">*</span>
+                <span class="mx-8 text-lg">CHÙA Y SƠN</span><span class="text-[var(--gold-accent)] mx-2">*</span>
+                <span class="mx-8 text-lg">SOI TỚM - BẾN VẠN PHÚC</span><span
+                    class="text-[var(--gold-accent)] mx-2">*</span>
+                <span class="mx-8 text-lg">LĂNG DINH HƯƠNG</span><span class="text-[var(--gold-accent)] mx-2">*</span>
+                <!-- Duplicate content to ensure seamless marquee loop -->
+                <span class="mx-8 text-lg font-semibold tracking-wider text-[var(--gold-accent)]">✨ KHÁM PHÁ HOÀNG
+                    VÂN:</span>
+                <span class="mx-8 text-lg">DI TÍCH AN TOÀN KHU II</span><span
+                    class="text-[var(--gold-accent)] mx-2">*</span>
+                <span class="mx-8 text-lg">ĐÌNH CHỢ VÂN</span><span class="text-[var(--gold-accent)] mx-2">*</span>
+                <span class="mx-8 text-lg">CHÙA Y SƠN</span><span class="text-[var(--gold-accent)] mx-2">*</span>
+                <span class="mx-8 text-lg">SOI TỚM - BẾN VẠN PHÚC</span><span
+                    class="text-[var(--gold-accent)] mx-2">*</span>
+                <span class="mx-8 text-lg">LĂNG DINH HƯƠNG</span><span class="text-[var(--gold-accent)] mx-2">*</span>
+            </div>
+        </div>
+        <!-- Destinations Section -->
+        <section id="destinations" class="py-24 fade-in-section">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl md:text-5xl font-extrabold drop-shadow-lg gradient-text">Điểm Đến Hàng Đầu</h2>
+                    <p class="text-gray-500 mt-4 text-lg max-w-2xl mx-auto">Từ những thành phố sôi động đến những miền
+                        quê yên bình, Việt Nam luôn có điều bất ngờ dành cho bạn.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Destination Card 1 -->
+                    <div class="destination-card group relative rounded-xl shadow-xl overflow-hidden cursor-pointer"
+                        data-title="ATK Hiệp Hòa - Cái nôi của phong trào cách mạng Việt Nam"
+                        data-description="ATK Hiệp Hòa, vùng đất “địa linh nhân kiệt” của Bắc Ninh, là niềm tự hào về một thời tiền khởi nghĩa gian khó mà hào hùng, nơi những làng quê bình dị trở thành pháo đài và lòng dân là thành lũy vững chắc bảo vệ Đảng."
+                        data-images="https://img.baobacgiang.vn/Medias/2022/04/29/09/20220429085943-anh-11-s.jpg,https://baobacgiang.com.vn/image/img/no-image.jpg?v=1">
+                        <img src="img/atik ii.jpg" alt="Khu di tích ATK Hiệp Hòa"
+                            class="w-full h-96 object-cover transform group-hover:scale-110 transition-transform duration-500"
+                            onerror="this.onerror=null;this.src='https://placehold.co/600x400/94A3B8/FFFFFF?text=ATK+Hiệp+Hòa'">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 p-6 text-white">
+                            <h3 class="text-2xl font-bold mb-2">Khu di tích ATK HIEP HOA</h3>
+                            <p class="opacity-80">ATK Hiệp Hòa - Cái nôi của phong trào cách mạng Việt Nam </p>
+                        </div>
+                        <div
+                            class="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <span class="text-white border-2 border-white py-2 px-5 rounded-full font-semibold">Xem Chi
+                                Tiết</span>
+                        </div>
+                    </div>
+                    <!-- Destination Card 2 -->
+                    <div class="destination-card group relative rounded-xl shadow-xl overflow-hidden cursor-pointer"
+                        data-title="Đình Chợ Vân- địa điểm diễn ra cuộc diễn thuyết của cán bộ cách mạng"
+                        data-description="Trong thời kỳ tiền khởi nghĩa giành chính quyền, ATK II Hiệp Hòa là địa bàn chiến lược về vị trí địa lý và quân sự. Nơi đây diễn ra nhiều sự kiện lịch sử gắn liền với tên tuổi các đồng chí lãnh đạo Trung ương, Xứ ủy Bắc Kỳ, gắn với mỗi gia đình, người dân và trong di tích ATK II Hiệp Hòa. Tiêu biểu có 3 địa điểm là gia đình và 5 cơ sở tôn giáo, tín ngưỡng, trong đó có đình Chợ Vân. Trước Cách mạng Tháng Tám, đình Chợ Vân, xã Hoàng An, huyện Hiệp Hòa (Bắc Ninh) là nơi diễn ra cuộc diễn thuyết của cán bộ cách mạng phát động cao trào kháng Nhật, đánh Pháp, giành chính quyền về tay nhân dân. Đây là một trong 8 điểm di tích lịch sử của An toàn khu (ATK) II Hiệp Hòa được Thủ tướng Chính phủ công nhận Di tích quốc gia đặc biệt."
+                        data-images="https://danviet.ex-cdn.com/files/f1/296231569849192448/2022/2/24/cho-dinh21-16456967340321030361974-16456973235411366812445.jpeg,https://img.baobacgiang.vn/Medias/2022/04/29/09/20220429085943-anh-11-s.jpg">
+                        <img src="img/dinhchovan.jpg" alt="Đình Chợ Vân"
+                            class="w-full h-96 object-cover transform group-hover:scale-110 transition-transform duration-500"
+                            onerror="this.onerror=null;this.src='https://placehold.co/600x400/94A3B8/FFFFFF?text=Đình+Chợ+Vân'">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 p-6 text-white">
+                            <h3 class="text-2xl font-bold mb-2">Đình Chợ Vân</h3>
+                            <p class="opacity-80"> Địa điểm diễn ra cuộc diễn thuyết của cán bộ cách mạng.....</p>
+                        </div>
+                        <div
+                            class="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <span class="text-white border-2 border-white py-2 px-5 rounded-full font-semibold">Xem Chi
+                                Tiết</span>
+                        </div>
+                    </div>
+                    <!-- Destination Card 3 -->
+                    <div class="destination-card group relative rounded-xl shadow-xl overflow-hidden cursor-pointer"
+                        data-title="Về Hiệp Hòa - Thăm ATK II, trẩy hội bánh chưng Vân"
+                        data-description="Bạn đã bao giờ nghĩ về một chuyến đi vừa để tri ân quá khứ hào hùng, vừa để hòa mình vào không khí lễ hội đậm đà bản sắc văn hóa? Nếu chưa, hãy một lần về với Hiệp Hòa (Bắc Ninh) – mảnh đất trung du bình dị mà ẩn chứa trong mình cả một bề dày lịch sử và những nét văn hóa truyền thống độc đáo. Hành trình khám phá Di tích quốc gia đặc biệt ATK II và trẩy hội bánh chưng làng Vân chắc chắn sẽ để lại trong bạn những cảm xúc khó quên."
+                        data-images="https://img.baobacgiang.vn/Medias/585/2025/01/11/6.jpg,https://img.baobacgiang.vn/Medias/585/2025/01/11/4.jpg">
+                        <img src="img/11.jpg" alt="Hiệp Hòa ATK II và Bánh Chưng Vân"
+                            class="w-full h-96 object-cover transform group-hover:scale-110 transition-transform duration-500"
+                            onerror="this.onerror=null;this.src='https://placehold.co/600x400/94A3B8/FFFFFF?text=Bánh+Chưng+Vân'">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 p-6 text-white">
+                            <h3 class="text-2xl font-bold mb-2">Khu di tích ATK HIEP HOA</h3>
+                            <p class="opacity-80">ATK Hiệp Hòa - Cái nôi của phong trào cách mạng Việt Nam </p>
+                        </div>
+                        <div
+                            class="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <span class="text-white border-2 border-white py-2 px-5 rounded-full font-semibold">Xem Chi
+                                Tiết</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Culture & Specialties Section -->
+        <section id="culture" class="py-24 fade-in-section">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl md:text-5xl font-extrabold drop-shadow-lg gradient-text">Đặc Sản Quê Hương</h2>
+                    <p class="text-gray-500 mt-4 text-lg max-w-2xl mx-auto">Khám phá hương vị độc đáo, kết tinh từ văn
+                        hóa và sản vật của vùng đất Hoàng Vân - Bắc Ninh.</p>
+                </div>
+                <div class="swiper culture-swiper">
+                    <div class="swiper-wrapper py-4">
+                        <div class="swiper-slide h-auto">
+                            <div class="text-center group p-4">
+                                <img src="img/banhchungvan.jpg" alt="Bánh Chưng Vân"
+                                    class="w-48 h-48 object-cover rounded-full mx-auto shadow-lg border-4 border-white transform group-hover:scale-105 group-hover:shadow-xl transition-all duration-300"
+                                    onerror="this.onerror=null;this.src='https://placehold.co/400x400/8B4513/FFFFFF?text=Bánh+Chưng'">
+                                <h4 class="text-xl font-bold mt-6 mb-2 text-[var(--dark-blue)]">Bánh Chưng</h4>
+                                <p class="text-gray-500">Hương vị Tết cổ truyền.</p>
+                            </div>
+                        </div>
+                        <div class="swiper-slide h-auto">
+                            <div class="text-center group p-4">
+                                <img src="img/nhamtram.jpg" alt="Nham Trám"
+                                    class="w-48 h-48 object-cover rounded-full mx-auto shadow-lg border-4 border-white transform group-hover:scale-105 group-hover:shadow-xl transition-all duration-300"
+                                    onerror="this.onerror=null;this.src='https://placehold.co/400x400/8B4513/FFFFFF?text=Nham+Trám'">
+                                <h4 class="text-xl font-bold mt-6 mb-2 text-[var(--dark-blue)]">Nham Trám</h4>
+                                <p class="text-gray-500">Vị bùi của trám và rau thơm.</p>
+                            </div>
+                        </div>
+                        <div class="swiper-slide h-auto">
+                            <div class="text-center group p-4">
+                                <img src="img/raucan.jpg" alt="Rau Cần"
+                                    class="w-48 h-48 object-cover rounded-full mx-auto shadow-lg border-4 border-white transform group-hover:scale-105 group-hover:shadow-xl transition-all duration-300"
+                                    onerror="this.onerror=null;this.src='https://placehold.co/400x400/8B4513/FFFFFF?text=Rau+Cần'">
+                                <h4 class="text-xl font-bold mt-6 mb-2 text-[var(--dark-blue)]">Rau Cần</h4>
+                                <p class="text-gray-500">Hương vị thanh mát đặc trưng.</p>
+                            </div>
+                        </div>
+                        <div class="swiper-slide h-auto">
+                            <div class="text-center group p-4">
+                                <img src="img/tramden.jpg" alt="Trám Đen Hoàng Vân"
+                                    class="w-48 h-48 object-cover rounded-full mx-auto shadow-lg border-4 border-white transform group-hover:scale-105 group-hover:shadow-xl transition-all duration-300"
+                                    onerror="this.onerror=null;this.src='https://placehold.co/400x400/8B4513/FFFFFF?text=Trám+Đen'">
+                                <h4 class="text-xl font-bold mt-6 mb-2 text-[var(--dark-blue)]">Trám Đen Hoàng Vân</h4>
+                                <p class="text-gray-500">Đặc sản béo bùi trứ danh.</p>
+                            </div>
+                        </div>
+                        <div class="swiper-slide h-auto">
+                            <div class="text-center group p-4">
+                                <img src="img//banhdake1.png"
+                                    alt="Bánh Đa Kê - Đặc sản Hoàng Vân"
+                                    class="w-48 h-48 object-cover rounded-full mx-auto shadow-lg border-4 border-white transform group-hover:scale-105 group-hover:shadow-xl transition-all duration-300">
+                                <h4 class="text-xl font-bold mt-6 mb-2 text-[var(--dark-blue)]">Bánh Đa Kê - Hoàng Vân</h4>
+                                <p class="text-gray-500">Bánh đa đặc sản Hoàng Vân.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-pagination culture-pagination mt-8 relative"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Video Section -->
+        <section id="videos" class="py-24 fade-in-section">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl md:text-5xl font-extrabold drop-shadow-lg gradient-text">Video Giới Thiệu</h2>
+                    <p class="text-gray-500 mt-4 text-lg max-w-2xl mx-auto">Cùng xem những thước phim VỀ HIỆP HOÀ THĂM
+                        ATKII TRẢI NGHIỆM NGÀY HỘI BÁNH CHƯNG VÂN </p>
+                </div>
+                <!-- New outer wrapper for animated border and floating effect -->
+                <div class="max-w-4xl mx-auto video-outer-wrapper">
+                    <div class="video-container">
+                        <!-- Facebook Video Embed -->
+                        <iframe src="https://www.facebook.com/plugins/video.php?height=314&href=https%3A%2F%2Fwww.facebook.com%2Fhoangvanexpress%2Fvideos%2F1024135853221573%2F&show_text=false&width=560&t=0" width="560" height="314" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowFullScreen="true"></iframe>
+                    </div>
+                    <div class="p-6 text-center" style="background-color: var(--bg-card);">
+                        <h3 class="text-xl font-bold mb-2 text-gray-800">Video giới thiệu về Hoàng Vân</h3>
+                        <p class="text-gray-600 text-sm">Một cái nhìn tổng quan về vẻ đẹp và văn hóa của Hoàng Vân, Bắc
+                            Ninh</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- New Banner Section Added Here -->
+        <section id="new-banner" class="new-banner-section fade-in-section py-24">
+            <!-- To make the banner clickable, wrap the entire new-banner-container in an <a> tag -->
+            <!-- Replace 'YOUR_DESTINATION_LINK_HERE' with the actual URL you want the banner to link to -->
+            <a href="https://hoangvan.bacninh.gov.vn/" target="_blank" rel="noopener noreferrer" class="new-banner-container" id="newBannerContainer">
+                <!-- Image for the banner, replace 'Xã Hoàng Vân.jpg' with your actual image path -->
+                <img src="img/Xã Hoàng Vân.jpg" alt="Banner quảng cáo Hoàng Vân" class="new-banner-image"
+                    onerror="this.onerror=null;this.src='https://placehold.co/1200x250/C6E2FF/007bff?text=Banner+Quảng+Cáo'">
+                
+                <div class="new-banner-content" id="newBannerContent">
+                    <!-- Logo image for the banner - REMOVED -->
+                    <!-- Nội dung văn bản - REMOVED -->
+                </div>
+            </a>
+        </section>
+
+        <!-- AI Assistant Section -->
+        <section id="ai-assistant" class="py-24 fade-in-section">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl md:text-5xl font-extrabold drop-shadow-lg gradient-text">Trợ Lý Du Lịch AI</h2>
+                    <p class="text-gray-500 mt-4 text-lg max-w-2xl mx-auto">Có câu hỏi về chuyến đi? Hãy để trợ lý ảo
+                        thông minh của chúng tôi giúp bạn lập kế hoạch hoàn hảo!</p>
+                </div>
+                <div
+                    class="max-w-3xl mx-auto bg-white rounded-2xl shadow-2xl border border-gray-100 flex flex-col h-[70vh] max-h-[700px]">
+                    <!-- Chat Header -->
+                    <div class="p-4 bg-gray-800 text-white rounded-t-2xl flex items-center">
+                        <img src="img/logohoangvan5.jpg" alt="AI Assistant Avatar"
+                            class="h-10 w-10 bg-white p-1 rounded-full mr-3"
+                            onerror="this.onerror=null;this.src='https://placehold.co/100x100/CCCCCC/333333?text=AI'">
+                        <div>
+                            <h3 class="font-bold">Trợ lý AI Hoàng Vân</h3>
+                            <p class="text-sm opacity-80">Online</p>
+                        </div>
+                    </div>
+
+                    <!-- Chat History -->
+                    <div id="chat-history" class="flex-1 p-6 space-y-4 overflow-y-auto">
+                        <!-- Initial AI Message -->
+                        <div class="flex items-end space-x-2">
+                            <img src="img/logohoangvan5.jpg" alt="AI Assistant Avatar"
+                                class="h-8 w-8 bg-white p-0.5 rounded-full flex-shrink-0"
+                                onerror="this.onerror=null;this.src='https://placehold.co/100x100/CCCCCC/333333?text=AI'">
+                            <div class="ai-bubble">
+                                <p>Xin chào! Tôi là trợ lý du lịch AI của Hoàng Vân Express. Tôi có thể giúp gì cho
+                                    chuyến đi của bạn?</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Suggestion Chips -->
+                    <div id="suggestion-chips" class="px-4 pb-2 flex-wrap gap-2 flex">
+                        <button
+                            class="suggestion-chip bg-gray-200 text-gray-700 text-sm px-3 py-1 rounded-full hover:bg-gray-300 transition">Kể
+                            về An Toàn Khu II</button>
+                        <button
+                            class="suggestion-chip bg-gray-200 text-gray-700 text-sm px-3 py-1 rounded-full hover:bg-gray-300 transition">Đặc
+                            sản Hoàng Vân có gì?</button>
+                        <button
+                            class="suggestion-chip bg-gray-200 text-gray-700 text-sm px-3 py-1 rounded-full hover:bg-gray-300 transition">Lịch
+                            trình 1 ngày ở Hiệp Hòa</button>
+                    </div>
+
+                    <!-- Input Form -->
+                    <div class="p-4 bg-gray-50 border-t border-gray-200 rounded-b-2xl">
+                        <form id="ai-form" class="flex items-center space-x-3">
+                            <input type="text" id="ai-prompt" placeholder="Hỏi tôi bất cứ điều gì về du lịch..."
+                                class="w-full px-4 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-[var(--primary-red)] transition-shadow">
+                            <button type="submit" id="ai-submit-btn" aria-label="Send message"
+                                class="btn-primary text-white p-3 rounded-full flex-shrink-0">
+                                <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                    fill="currentColor">
+                                    <path
+                                        d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z">
+                                    </path>
+                                </svg>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Partners Section -->
+        <section id="partners" class="py-24 fade-in-section">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl md:text-5xl font-extrabold drop-shadow-lg gradient-text">Các trang Fanpage liên
+                        kết
+                        trực thuộc HIỆP HOÀ.NET</h2>
+                    <p class="text-gray-500 mt-4 text-lg max-w-2xl mx-auto">Cùng phát triển và quảng bá du lịch, văn hóa
+                        Hoàng Vân, Bắc Ninh.</p>
+                </div>
+                <div class="swiper partners-swiper relative">
+                    <div class="swiper-wrapper">
+                        <!-- Partner Slide 1 -->
+                        <div class="swiper-slide h-auto">
+                            <a href="https://www.facebook.com/hiephoa.express" target="_blank" rel="noopener noreferrer"
+                                class="block p-8 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 text-center">
+                                <img src="img/hiephoa.jpg" alt="Hiệp Hoà Express Logo" class="h-20 mx-auto mb-4"
+                                    onerror="this.onerror=null;this.src='https://placehold.co/100x100/CCCCCC/333333?text=Hiệp+Hoà'">
+                                <h4 class="text-xl font-bold text-gray-800">Hiệp Hoà Express</h4>
+                                <p class="text-gray-500 mt-2">Trang fanpage chủ quản các trang liên kết hệ thống</p>
+                            </a>
+                        </div>
+                        <!-- Partner Slide 2 -->
+                        <div class="swiper-slide h-auto">
+                            <a href="https://www.facebook.com/hoangvanexpress"
+                                class="block p-8 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 text-center">
+                                <img src="img/logohoangvan5.jpg" alt="Hoàng Vân Express Logo"
+                                    class="h-20 mx-auto mb-4 rounded-full"
+                                    onerror="this.onerror=null;this.src='https://placehold.co/100x100/CCCCCC/333333?text=Hoàng+Vân'">
+                                <h4 class="text-xl font-bold text-[var(--primary-red)]">Hoàng Vân Express</h4>
+                                <p class="text-gray-500 mt-2">Fanpage quản lý chủ quản web Hoàng Vân Express</p>
+                            </a>
+                        </div>
+                        <!-- Partner Slide 3 -->
+                        <div class="swiper-slide h-auto">
+                            <a href="https://www.facebook.com/xuancam.express" target="_blank" rel="noopener noreferrer"
+                                class="block p-8 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 text-center">
+                                <img src="img/xuancam.jpg" alt="Xuân Cẩm Express Logo" class="h-20 mx-auto mb-4"
+                                    onerror="this.onerror=null;this.src='https://placehold.co/100x100/CCCCCC/333333?text=Xuân+Cẩm'">
+                                <h4 class="text-xl font-bold text-gray-800">Xuân Cẩm Express</h4>
+                                <p class="text-gray-500 mt-2">Khám phá vẻ đẹp Xuân Cẩm</p>
+                            </a>
+                        </div>
+                        <!-- Partner Slide 4 -->
+                        <div class="swiper-slide h-auto">
+                            <a href="https://www.facebook.com/profile.php?id=61577400681750" target="_blank" rel="noopener noreferrer"
+                                class="block p-8 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 text-center">
+                                <img src="img/hopthinh.jpg" alt="Hợp Thịnh Express Logo" class="h-20 mx-auto mb-4"
+                                    onerror="this.onerror=null;this.src='https://placehold.co/100x100/CCCCCC/333333?text=Hợp+Thịnh'">
+                                <h4 class="text-xl font-bold text-gray-800">Hợp Thịnh Express</h4>
+                                <p class="text-gray-500 mt-2">Kết nối du lịch Hợp Thịnh</p>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="swiper-button-next text-[var(--primary-red)]"></div>
+                    <div class="swiper-button-prev text-[var(--primary-red)]"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-24 fade-in-section">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl md:text-5xl font-extrabold drop-shadow-lg gradient-text">Giữ Liên Lạc</h2>
+                    <p class="text-gray-500 mt-4 text-lg max-w-2xl mx-auto">Có câu hỏi hoặc góp ý? Đừng ngần ngại gửi
+                        tin nhắn cho chúng tôi.</p>
+                </div>
+                <div class="max-w-2xl mx-auto rounded-2xl shadow-lg p-8"
+                    style="background-color: var(--bg-card); transition: background-color 0.3s ease;">
+                    <form action="#" method="POST">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div><label for="name" class="block text-gray-700 font-semibold mb-2">Họ và
+                                    Tên</label><input type="text" id="name" name="name"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-red)]"
+                                    style="background-color: var(--bg-body); color: var(--text-body); border-color: var(--border-color);"
+                                    required></div>
+                            <div><label for="email" class="block text-gray-700 font-semibold mb-2">Email</label><input
+                                    type="email" id="email" name="email"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-red)]"
+                                    style="background-color: var(--bg-body); color: var(--text-body); border-color: var(--border-color);"
+                                    required></div>
+                        </div>
+                        <div class="mb-6"><label for="message" class="block text-gray-700 font-semibold mb-2">Lời
+                                Nhắn</label><textarea id="message" name="message" rows="5"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-red)]"
+                                style="background-color: var(--bg-body); color: var(--text-body); border-color: var(--border-color);"
+                                required></textarea></div>
+                        <div class="text-center"><button type="submit"
+                                class="btn-primary text-white font-bold py-3 px-10 rounded-full text-lg w-full md:w-auto">Gửi
+                                Tin Nhắn</button></div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Destination Modal -->
+    <div id="destination-modal"
+        class="modal fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4 z-[100] invisible opacity-0">
+        <div id="modal-content"
+            class="modal-content rounded-lg shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col md:flex-row overflow-hidden transform scale-95">
+            <div class="w-full md:w-1/2 h-64 md:h-auto">
+                <div class="swiper modal-swiper h-full">
+                    <div class="swiper-wrapper" id="modal-swiper-wrapper"></div>
+                    <div class="swiper-button-next text-white"></div>
+                    <div class="swiper-button-prev text-white"></div>
+                </div>
+            </div>
+            <div class="w-full md:w-1/2 p-6 md:p-8 overflow-y-auto">
+                <h3 id="modal-title" class="text-3xl font-bold mb-4"></h3>
+                <p id="modal-description" class="leading-relaxed"></p>
+            </div>
+        </div>
+        <button id="modal-close-button" aria-label="Close modal"
+            class="absolute top-4 right-4 text-white hover:text-gray-300 text-5xl leading-none transition-colors duration-300">&times;</button>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-[var(--dark-blue)] text-white pt-16 pb-8">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <div class="md:col-span-2">
+                    <a href="#home" class="flex items-center space-x-3 mb-4">
+                        <img src="img/logohoangvan5.jpg" alt="Hoàng Vân Express Logo" class="h-10 w-10 rounded-full"
+                            onerror="this.onerror=null;this.src='https://placehold.co/100x100/CCCCCC/333333?text=Logo'">
+                        <span class="text-2xl font-extrabold tracking-tight">Hoàng Vân <span
+                                class="text-[var(--primary-red)]">Express</span></span>
+                    </a>
+                    <p class="text-gray-400 max-w-md">Chuyên trang cập nhật thông tin du lịch, văn hóa, và đặc sản từ
+                        quê hương Hoàng Vân, Bắc Ninh đến mọi miền Tổ quốc.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Liên Kết Nhanh</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#destinations" class="text-gray-400 hover:text-white transition">Điểm Đến</a></li>
+                        <li><a href="#culture" class="text-gray-400 hover:text-white transition">Đặc Sản</a></li>
+                        <li><a href="#videos" class="text-gray-400 hover:text-white transition">Video</a></li>
+                        <li><a href="#ai-assistant" class="text-gray-400 hover:text-white transition">Trợ Lý AI</a></li>
+                        <li><a href="#contact" class="text-gray-400 hover:text-white transition">Liên Hệ</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Theo Dõi Chúng Tôi</h4>
+                    <div class="flex space-x-4">
+                        <a href="https://www.facebook.com/hoangvanexpress" aria-label="Facebook"
+                            class="w-10 h-10 bg-gray-700 hover:bg-[var(--primary-red)] rounded-full flex items-center justify-center transition"><svg
+                                class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z">
+                                </path>
+                            </svg></a>
+                        <a href="#" aria-label="Instagram"
+                            class="w-10 h-10 bg-gray-700 hover:bg-[var(--primary-red)] rounded-full flex items-center justify-center transition"><svg
+                                class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.85s-.011 3.584-.069 4.85c-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07s-3.584-.012-4.85-.07c-3.252-.148-4.771-1.691-4.919-4.919-.058-1.265-.069-1.645-.069-4.85s.011-3.584.069-4.85c.149-3.225 1.664 4.771 4.919-4.919 1.266-.057 1.644-.069 4.85-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.667.072 4.947c.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072s3.667-.014 4.947-.072c4.358-.2 6.78-2.618 6.98-6.98.059-1.281.073-1.689.073-4.948s-.014-3.667-.072-4.947c-.2-4.358-2.618-6.78-6.98-6.98-1.281-.059-1.689-.073-4.948-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.162 6.162 6.162 6.162-2.759 6.162-6.162-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4s1.791-4 4-4 4 1.79 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.441 1.441 1.441 1.441-.645 1.441-1.441-.645-1.44-1.441-1.44z">
+                                </path>
+                            </svg></a>
+                        <a href="#" aria-label="YouTube"
+                            class="w-10 h-10 bg-gray-700 hover:bg-[var(--primary-red)] rounded-full flex items-center justify-center transition"><svg
+                                class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z">
+                                </path>
+                            </svg></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-6 text-center text-gray-400 text-sm">
+                <p>&copy; 2025 Hoàng Vân Express. Thiết kế và phát triển với Đội Ngũ Admin Hoang Van Express.</p>
+            </div>
+        </div>
+    </footer>
+    <button id="scrollToTopBtn" aria-label="Scroll to top"
+        class="hidden fixed bottom-6 right-6 btn-primary text-white w-12 h-12 rounded-full shadow-lg flex items-center justify-center transition-opacity duration-300 focus:outline-none z-50">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+        </svg>
+    </button>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // --- Basic UI Elements ---
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            // Toggle mobile menu visibility
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            // Close mobile menu when a link is clicked
+            document.querySelectorAll('#mobile-menu a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                });
+            });
+
+            const scrollToTopBtn = document.getElementById('scrollToTopBtn');
+            // Show/hide scroll to top button based on scroll position
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 200) {
+                    scrollToTopBtn.classList.remove('hidden');
+                } else {
+                    scrollToTopBtn.classList.add('hidden');
+                }
+            });
+            // Smooth scroll to top when button is clicked
+            scrollToTopBtn.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+
+            // --- Theme Toggle Logic ---
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            const themeToggleMobileBtn = document.getElementById('theme-toggle-mobile');
+            const htmlElement = document.documentElement;
+            const sunIcon = document.getElementById('sun-icon');
+            const moonIcon = document.getElementById('moon-icon');
+            const sunIconMobile = document.getElementById('sun-icon-mobile');
+            const moonIconMobile = document.getElementById('moon-icon-mobile');
+
+            // Function to apply a theme
+            function applyTheme(theme) {
+                if (theme === 'dark') {
+                    htmlElement.classList.add('dark-mode');
+                    if (sunIcon) sunIcon.classList.remove('hidden');
+                    if (moonIcon) moonIcon.classList.add('hidden');
+                    if (sunIconMobile) sunIconMobile.classList.remove('hidden');
+                    if (moonIconMobile) moonIconMobile.classList.add('hidden');
+                } else {
+                    htmlElement.classList.remove('dark-mode');
+                    if (sunIcon) sunIcon.classList.add('hidden');
+                    if (moonIcon) moonIcon.classList.remove('hidden');
+                    if (sunIconMobile) sunIconMobile.classList.add('hidden');
+                    if (moonIconMobile) moonIconMobile.classList.remove('hidden');
+                }
+            }
+
+            // Function to toggle the theme
+            function toggleTheme() {
+                let currentTheme = localStorage.getItem('theme');
+                if (currentTheme === 'dark') {
+                    applyTheme('light');
+                    localStorage.setItem('theme', 'light');
+                } else {
+                    applyTheme('dark');
+                    localStorage.setItem('theme', 'dark');
+                }
+            }
+
+            // Set initial theme based on localStorage or system preference
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                applyTheme('dark');
+            } else {
+                applyTheme('light');
+            }
+
+            // Event listeners for theme toggle buttons
+            themeToggleBtn.addEventListener('click', toggleTheme);
+            themeToggleMobileBtn.addEventListener('click', toggleTheme);
+
+
+            // --- Swiper Initializations ---
+            // Hero section image carousel
+            const heroSwiper = new Swiper('.hero-swiper', {
+                loop: true, // Enable infinite loop
+                autoplay: {
+                    delay: 5000, // 5 seconds delay between slides
+                    disableOnInteraction: false // Continue autoplay even after user interaction
+                },
+                pagination: {
+                    el: '.swiper-pagination', // Pagination dots
+                    clickable: true // Make pagination dots clickable
+                },
+                effect: 'fade', // Fade transition effect
+                fadeEffect: {
+                    crossFade: true // Cross-fade between slides
+                },
+            });
+
+            // Culture section carousel
+            const cultureSwiper = new Swiper('.culture-swiper', {
+                loop: true, // Enable infinite loop
+                autoplay: {
+                    delay: 3000, // 3 seconds delay
+                    disableOnInteraction: false
+                },
+                slidesPerView: 2, // Default slides per view
+                spaceBetween: 10, // Default space between slides
+                pagination: {
+                    el: '.culture-pagination',
+                    clickable: true
+                },
+                // Responsive breakpoints for different screen sizes
+                breakpoints: {
+                    768: {
+                        slidesPerView: 3,
+                        spaceBetween: 20
+                    },
+                    1024: {
+                        slidesPerView: 4,
+                        spaceBetween: 30
+                    },
+                }
+            });
+
+            // Partners section carousel
+            const partnersSwiper = new Swiper('.partners-swiper', {
+                loop: true, // Enable infinite loop
+                autoplay: {
+                    delay: 3500, // 3.5 seconds delay
+                    disableOnInteraction: false
+                },
+                slidesPerView: 1, // Default slides per view
+                spaceBetween: 20, // Default space between slides
+                navigation: {
+                    nextEl: '.swiper-button-next', // Next button
+                    prevEl: '.swiper-button-prev', // Previous button
+                },
+                // Responsive breakpoints
+                breakpoints: {
+                    640: {
+                        slidesPerView: 2,
+                        spaceBetween: 30
+                    },
+                    1024: {
+                        slidesPerView: 3,
+                        spaceBetween: 40
+                    },
+                }
+            });
+
+            // --- Destination Modal Logic ---
+            const modal = document.getElementById('destination-modal');
+            const modalContent = document.getElementById('modal-content');
+            const modalCloseButton = document.getElementById('modal-close-button');
+            const modalTitle = document.getElementById('modal-title');
+            const modalDescription = document.getElementById('modal-description');
+            const modalSwiperWrapper = document.getElementById('modal-swiper-wrapper');
+            let modalSwiper = null; // Variable to hold the modal's Swiper instance
+
+            // Add click listener to each destination card to open the modal
+            document.querySelectorAll('.destination-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    modalTitle.textContent = card.dataset.title; // Set modal title
+                    modalDescription.textContent = card.dataset.description; // Set modal description
+
+                    // Clear previous images and add new ones to the modal swiper
+                    modalSwiperWrapper.innerHTML = '';
+                    const images = card.dataset.images.split(',');
+                    images.forEach(imgUrl => {
+                        const slide = document.createElement('div');
+                        slide.className = 'swiper-slide';
+                        // Use inline style for background image for simplicity in this context
+                        slide.style.backgroundImage = `url(${imgUrl.trim()})`;
+                        // Add onerror to image URL for fallback
+                        slide.setAttribute('onerror', `this.style.backgroundImage='url(https://placehold.co/800x600/6B7280/FFFFFF?text=Image+Not+Found)'`);
+                        slide.style.backgroundSize = 'cover'; // Ensure image covers the slide
+                        slide.style.backgroundPosition = 'center'; // Center the background image
+                        modalSwiperWrapper.appendChild(slide);
+                    });
+
+                    // Show the modal with transition effects
+                    modal.classList.remove('invisible', 'opacity-0');
+                    modalContent.classList.remove('scale-95');
+
+                    // Destroy existing swiper instance before creating a new one
+                    if (modalSwiper) {
+                        modalSwiper.destroy(true, true);
+                    }
+                    // Initialize new Swiper for the modal
+                    modalSwiper = new Swiper('.modal-swiper', {
+                        loop: true,
+                        navigation: {
+                            nextEl: '.swiper-button-next',
+                            prevEl: '.swiper-button-prev'
+                        },
+                    });
+                });
+            });
+
+            // Function to close the modal
+            const closeModal = () => {
+                modal.classList.add('invisible', 'opacity-0');
+                modalContent.classList.add('scale-95'); // Scale out effect
+                // Destroy swiper when modal closes to prevent memory leaks
+                if (modalSwiper) {
+                    modalSwiper.destroy(true, true);
+                    modalSwiper = null;
+                }
+            };
+            // Close modal when close button is clicked
+            modalCloseButton.addEventListener('click', closeModal);
+            // Close modal when clicking outside the modal content
+            modal.addEventListener('click', (event) => {
+                if (event.target === modal) {
+                    closeModal();
+                }
+            });
+
+            // --- Fade-in sections on scroll ---
+            const sections = document.querySelectorAll('.fade-in-section');
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target); // Stop observing once visible
+                    }
+                    // Trigger new banner animation if it's in view
+                    if (entry.target.id === 'new-banner' && entry.isIntersecting) {
+                        const newBannerContainer = document.getElementById('newBannerContainer');
+                        const newBannerImage = newBannerContainer.querySelector('.new-banner-image'); // Select the image directly
+                        if (newBannerContainer) newBannerContainer.classList.add('loaded');
+                        if (newBannerImage) newBannerImage.classList.add('loaded'); // Add loaded class to image for zoom effect
+                    }
+                });
+            }, { threshold: 0.15 }); // Trigger when 15% of the section is visible
+            sections.forEach(section => observer.observe(section));
+
+            // --- AI Assistant ---
+            const aiForm = document.getElementById('ai-form');
+            const aiPromptInput = document.getElementById('ai-prompt');
+            const chatHistory = document.getElementById('chat-history');
+            const suggestionChipsContainer = document.getElementById('suggestion-chips');
+
+            // IMPORTANT: In a real application, never expose your API key directly in client-side code.
+            // Use a backend proxy to call the AI API securely.
+            const GEMINI_API_KEY = ""; // API key is left empty as per instructions. Canvas will provide it at runtime.
+            const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
+
+            // Function to call the Gemini API
+            async function callAIApi(prompt) {
+                if (!prompt) return; // Do not send empty prompts
+
+                appendMessage(prompt, 'user'); // Add user message to chat history
+                aiPromptInput.value = ''; // Clear input field
+                suggestionChipsContainer.classList.add('hidden'); // Hide suggestions after user asks a question
+                showTypingIndicator(); // Show AI typing indicator
+
+                // Prepare payload for the API request
+                const chatHistoryPayload = [];
+                // Add the user's prompt to the history for the API call context
+                chatHistoryPayload.push({ role: "user", parts: [{ text: "Bạn là một trợ lý du lịch chuyên nghiệp và thân thiện, chuyên về du lịch Việt Nam, đặc biệt là vùng Bắc Ninh. Hãy trả lời câu hỏi sau của người dùng một cách chi tiết, hữu ích và hấp dẫn, sử dụng định dạng Markdown. Câu hỏi: " + prompt }] });
+
+                const payload = { contents: chatHistoryPayload };
+
+                try {
+                    const response = await fetch(API_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    // Check for HTTP errors
+                    if (!response.ok) {
+                        const errorBody = await response.json();
+                        throw new Error(`API error! Status: ${response.status}. Message: ${errorBody.error.message}`);
+                    }
+
+                    const result = await response.json();
+
+                    removeTypingIndicator(); // Remove typing indicator once response is received
+
+                    // Process and display AI response
+                    if (result.candidates && result.candidates.length > 0 && result.candidates[0].content && result.candidates[0].content.parts && result.candidates[0].content.parts.length > 0) {
+                        const text = result.candidates[0].content.parts[0].text;
+                        appendMessage(marked.parse(text), 'ai'); // Render Markdown content as HTML
+                    } else {
+                        throw new Error("Không nhận được phản hồi hợp lệ từ AI.");
+                    }
+                } catch (error) {
+                    removeTypingIndicator(); // Remove typing indicator on error
+                    console.error("Error calling AI API:", error); // Log error for debugging
+                    appendMessage(`<p class="text-red-500">Đã có lỗi xảy ra khi kết nối với AI. Vui lòng thử lại sau. Chi tiết: ${error.message}</p>`, 'ai');
+                }
+            }
+
+            // Event listener for form submission
+            aiForm.addEventListener('submit', (e) => {
+                e.preventDefault(); // Prevent default form submission
+                callAIApi(aiPromptInput.value.trim()); // Call AI with trimmed input
+            });
+
+            // Event listener for suggestion chips
+            suggestionChipsContainer.addEventListener('click', (e) => {
+                if (e.target.classList.contains('suggestion-chip')) {
+                    const prompt = e.target.textContent;
+                    callAIApi(prompt); // Call AI with the chip's text as prompt
+                }
+            });
+
+            // Function to append messages to the chat history
+            function appendMessage(content, role) {
+                const messageWrapper = document.createElement('div');
+                messageWrapper.className = `flex items-end space-x-2 ${role === 'user' ? 'justify-end' : ''}`;
+
+                const bubble = document.createElement('div');
+                bubble.className = 'chat-bubble ' + (role === 'user' ? 'user-bubble' : 'ai-bubble');
+                bubble.innerHTML = content; // Use innerHTML to render Markdown
+
+                const avatar = document.createElement('img');
+                avatar.className = 'h-8 w-8 rounded-full flex-shrink-0';
+                avatar.alt = role === 'user' ? 'User Avatar' : 'AI Assistant Avatar'; // Alt text for accessibility
+
+                if (role === 'user') {
+                    avatar.src = 'https://placehold.co/100x100/D92E3A/FFFFFF?text=Bạn'; // User Avatar
+                    messageWrapper.appendChild(bubble);
+                    messageWrapper.appendChild(avatar);
+                } else {
+                    avatar.src = 'https://i.imgur.com/uSAy2rW.png'; // AI Avatar
+                    avatar.classList.add('bg-white', 'p-0.5'); // Small padding for AI avatar
+                    messageWrapper.appendChild(avatar);
+                    messageWrapper.appendChild(bubble);
+                }
+
+                chatHistory.appendChild(messageWrapper);
+                // Scroll to the bottom of the chat history
+                chatHistory.scrollTop = chatHistory.scrollHeight;
+            }
+
+            // Function to show the AI typing indicator
+            function showTypingIndicator() {
+                const typingWrapper = document.createElement('div');
+                typingWrapper.id = 'typing-indicator'; // Unique ID for easy removal
+                typingWrapper.className = 'flex items-end space-x-2';
+                typingWrapper.innerHTML = `
+                    <img src="https://i.imgur.com/uSAy2rW.png" alt="AI Typing" class="h-8 w-8 bg-white p-0.5 rounded-full flex-shrink-0" onerror="this.onerror=null;this.src='https://placehold.co/100x100/CCCCCC/333333?text=AI'">
+                    <div class="ai-bubble typing-indicator"><span></span><span></span><span></span></div>
+                `;
+                chatHistory.appendChild(typingWrapper);
+                chatHistory.scrollTop = chatHistory.scrollHeight; // Scroll to view indicator
+            }
+
+            // Function to remove the AI typing indicator
+            function removeTypingIndicator() {
+                const indicator = document.getElementById('typing-indicator');
+                if (indicator) {
+                    indicator.remove();
+                }
+            }
+
+            // --- Video Effects and Play/Pause Overlay ---
+            // Removed video-specific JavaScript as it's now an iframe embed.
+            // The Facebook embed handles its own playback and controls.
+        });
+    </script>
+</body>
+
+</html>
